@@ -24,11 +24,16 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', 'src/assets'));
   app.setBaseViewsDir(join(__dirname, '..', 'src/views'));
+  // app.registerPartials(join(__dirname, '..', 'src/views/partials'));
   app.engine('hbs', hbs.__express);
   app.setViewEngine('hbs');
+  
+  const server = app.getHttpAdapter().getInstance();
+  hbs.registerPartials(join(__dirname, '..', 'src/views/partials'));
+  app.set('view options', { layout: 'layouts/main' });
 
   await app.listen(3000);
-  const server = app.getHttpAdapter().getInstance();
+
   printRoutes(server); 
 }
 bootstrap();

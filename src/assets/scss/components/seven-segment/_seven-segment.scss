@@ -1,0 +1,82 @@
+.seven-segment-container{
+    svg .segment {
+        fill: rgba(0, 0, 0, .15);
+        transition: .3s ease-in-out;
+        vertical-align: none;
+    }
+    .segment-d{
+        text-align: end;
+    }
+    .segment-d svg{
+        height: 100px;
+        width: 50px;
+    }
+
+    svg.num-dot{
+        width: 20px;
+    }
+
+    /* 1 */
+    .segment-d svg.num-1 .b,
+    .segment-d svg.num-1 .c,
+    /* 2 */
+    .segment-d svg.num-2 .a,
+    .segment-d svg.num-2 .b,
+    .segment-d svg.num-2 .d,
+    .segment-d svg.num-2 .e,
+    .segment-d svg.num-2 .g,
+    /* 3 */
+    .segment-d svg.num-3 .a,
+    .segment-d svg.num-3 .b,
+    .segment-d svg.num-3 .c,
+    .segment-d svg.num-3 .d,
+    .segment-d svg.num-3 .g,
+    /* 4 */
+    .segment-d svg.num-4 .b,
+    .segment-d svg.num-4 .c,
+    .segment-d svg.num-4 .f,
+    .segment-d svg.num-4 .g,
+    /* 5 */
+    .segment-d svg.num-5 .a,
+    .segment-d svg.num-5 .c,
+    .segment-d svg.num-5 .d,
+    .segment-d svg.num-5 .f,
+    .segment-d svg.num-5 .g,
+    /* 6 */
+    .segment-d svg.num-6 .a,
+    .segment-d svg.num-6 .c,
+    .segment-d svg.num-6 .d,
+    .segment-d svg.num-6 .e,
+    .segment-d svg.num-6 .f,
+    .segment-d svg.num-6 .g,
+    /* 7 */
+    .segment-d svg.num-7 .a,
+    .segment-d svg.num-7 .b,
+    .segment-d svg.num-7 .c,
+    /* 8 */
+    .segment-d svg.num-8 .a,
+    .segment-d svg.num-8 .b,
+    .segment-d svg.num-8 .c,
+    .segment-d svg.num-8 .d,
+    .segment-d svg.num-8 .e,
+    .segment-d svg.num-8 .f,
+    .segment-d svg.num-8 .g,
+    /* 9 */
+    .segment-d svg.num-9 .a,
+    .segment-d svg.num-9 .b,
+    .segment-d svg.num-9 .c,
+    .segment-d svg.num-9 .d,
+    .segment-d svg.num-9 .f,
+    .segment-d svg.num-9 .g,
+    /* 0 */
+    .segment-d svg.num-0 .a,
+    .segment-d svg.num-0 .b,
+    .segment-d svg.num-0 .c,
+    .segment-d svg.num-0 .d,
+    .segment-d svg.num-0 .e,
+    .segment-d svg.num-0 .f,
+    /* Dot */
+    .segment-d svg.num .dot {
+        fill: rgba($white, 0.9)
+    }
+}

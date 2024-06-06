@@ -75,4 +75,4 @@ src/**/*.webp
 
 
 # Vendor
-/vendor
+src/assets/vendor

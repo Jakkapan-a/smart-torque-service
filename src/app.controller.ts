@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Render, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
 
@@ -6,10 +6,11 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
   @Get()
+  @Render('index')
   root(@Res() res: Response) {
-    const name = 'Nest.js';
-    return res.render('index', { name });
+    return { title: 'Home', message: 'Welcome to the Home Page' };
   }
+  
   // about returns a JSON object
   @Get('about')
   about() {
