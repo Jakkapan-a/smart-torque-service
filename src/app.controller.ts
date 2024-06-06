@@ -10,4 +10,9 @@ export class AppController {
     const name = 'Nest.js';
     return res.render('index', { name });
   }
+  // about returns a JSON object
+  @Get('about')
+  about() {
+    return this.appService.getAbout();
+  }
 }

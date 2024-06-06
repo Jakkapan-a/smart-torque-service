@@ -73,3 +73,6 @@ src/**/*.jpeg
 src/**/*.gif
 src/**/*.webp
 
+
+# Vendor
+/vendor

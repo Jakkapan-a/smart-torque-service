@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
-@Controller('models')
+@Controller('model')
 export class ModelsController {
     constructor() {
         console.log('ModelsController');
@@ -9,5 +9,14 @@ export class ModelsController {
     @Get()
     findAll(): string {
         return 'This action returns all models';
+    }
+    @Post()
+    create(): string {
+        return 'This action adds a new model';
+    }
+
+    @Get(':id')
+    findOne(): string {
+        return 'This action returns a model';
     }
 }
