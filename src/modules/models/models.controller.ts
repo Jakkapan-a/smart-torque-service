@@ -7,7 +7,7 @@ import { modelPayloadDto } from './dto/model.dto';
 @Controller('model')
 export class ModelsController {
     constructor(private readonly modelsService: ModelsService) {
-        console.log('ModelsController');
+        // console.log('ModelsController');
     }
     @UseGuards(JwtGuard)
     @Get()

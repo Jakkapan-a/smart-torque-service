@@ -1,0 +1,82 @@
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Smart Torque Controls -> Sequence Setting</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center">Setting</p>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary" id="add-sequence" data-bs-toggle="modal" data-bs-target="#add-sequence-modal" >Add Sequence</button>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>SCW Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="add-sequence-modal" tabindex="-1" aria-labelledby="add-sequence-modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="add-sequence-modal" >Add Sequence</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-sequence-form">
+            <input type="hidden" name="model_id" value="{{model_id}}">
+            {{!-- Name --}}
+            <div class="mb-3">
+                <label for="model-name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="model-name" aria-describedby="model-name" name="name" min="2" maxlength="3">
+            </div>
+            {{!-- Min --}}
+            <div class="mb-3">
+                <label for="model-min" class="form-label">Min</label>
+                <input type="number" class="form-control" id="model-min" aria-describedby="model-min" name="min" min="0" max="10000">
+            </div>
+            {{!-- Max --}}
+            <div class="mb-3">
+                <label for="model-max" class="form-label">Max</label>
+                <input type="number" class="form-control" id="model-max" aria-describedby="model-max" name="max" min="0" max="10000">
+            </div>
+            {{!-- SCW Count --}}
+            <div class="mb-3">
+                <label for="model-scw-count" class="form-label">SCW Count</label>
+                <input type="number" class="form-control" id="model-scw-count" aria-describedby="model-scw-count" name="scw_count">
+            </div>
+            <div class="mb-3">
+                <label for="model-description" class="form-label">Description</label>
+                <textarea class="form-control" id="model-description" name="description" rows="3"></textarea>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-save">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

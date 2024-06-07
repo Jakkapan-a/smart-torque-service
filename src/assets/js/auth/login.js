@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(result);
             const token = result.access_token;
             localStorage.setItem('token', token);
+
+            // Set token to header
+            // const headers = new Headers();
+            // headers.append('Authorization', 'Bearer ' + token);
             alert("Login successfully!");
             window.location.href = '/';
         }else{

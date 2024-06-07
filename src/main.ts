@@ -17,7 +17,7 @@ async function printRoutes(server: any) {
   });
 
   // Print the routes
-  console.table(availableRoutes.map((r) => r.route));
+  console.table(availableRoutes.map((r) => r));
 }
 
 async function bootstrap() {

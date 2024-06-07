@@ -46,11 +46,10 @@ export class ModelsService {
     async setActive(id: number): Promise<Model> {
         return this.modelRepository.manager.transaction(async (entityManager) => {
             await entityManager.update(Model, { is_active: true }, { is_active: false });
-            console.log(`Activating model with id: ${id}`);
+            // console.log(`Activating model with id: ${id}`);
             await entityManager.update(Model, { id }, { is_active: true , updated_at: new Date() });
             const activatedModel = await entityManager.findOne(Model, { where: { id } });
-            console.log('Activated model:', activatedModel);
-
+            // console.log('Activated model:', activatedModel);
             return activatedModel;
         });
     }

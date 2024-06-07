@@ -3,14 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModelsModule } from './modules/models/models.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { RouterModule } from '@nestjs/core';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserService } from './modules/user/user.service';
 import { UserModule } from './modules/user/user.module';
+import { SequenceController } from './modules/sequence/sequence.controller';
+import { SequenceService } from './modules/sequence/sequence.service';
+import { SequenceModule } from './modules/sequence/sequence.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './modules/user/user.module';
       database: 'db.sqlite',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      logging: true,
     }),
     RouterModule.register([
       {
@@ -26,15 +28,13 @@ import { UserModule } from './modules/user/user.module';
         module: ModelsModule,
       },
     ]),
+    
     ModelsModule,
     AuthModule,
-    UserModule
+    UserModule,
+    SequenceModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService, UserService],
 })
 export class AppModule {}
-
-// ServeStaticModule.forRoot({
-//   rootPath: join(__dirname, '..', 'src/assets'),
-// }),
