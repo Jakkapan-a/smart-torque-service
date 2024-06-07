@@ -8,7 +8,7 @@
 </head>
 <body>
   {{> navbar }}
-  <div class="mt-5 content">
+  <div class="mt-5 content pt-3">
       {{{ body }}}
   </div>
   {{> footer }}
@@ -19,16 +19,13 @@
     <script src="/vendor/svganimation/svg.animation.js" type="text/javascript"></script>
     <script src="/js/custom.min.js" type="text/javascript"></script>
     <script src="/js/dlabnav-init.js" type="text/javascript"></script>
+    {{!-- <script src="/js/auth/check.js" type="text/javascript"></script> --}}
+    <script src="/js/script-custom.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         
         document.addEventListener('DOMContentLoaded', function() {
             // Check auth status
-            if (localStorage.getItem('auth')) {
-                console.log('Auth');
-            }else{
-                console.log('No auth');
-            }
         });
     </script>
     

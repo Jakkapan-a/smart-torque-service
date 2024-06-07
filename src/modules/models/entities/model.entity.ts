@@ -8,10 +8,13 @@ export class Model {
 
     @Column()
     name: string;
-
     // is_active is a boolean column that defaults to false
     @Column({ default: false })
     is_active: boolean;
+
+    @Column({ default: '' })
+    description: string;
+    
     // SQLite
     @CreateDateColumn({ type: 'datetime' })
     created_at: Date;

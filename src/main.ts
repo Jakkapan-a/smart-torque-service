@@ -31,9 +31,7 @@ async function bootstrap() {
   const server = app.getHttpAdapter().getInstance();
   hbs.registerPartials(join(__dirname, '..', 'src/views/partials'));
   app.set('view options', { layout: 'layouts/main' });
-
   await app.listen(3000);
-
   printRoutes(server); 
 }
 bootstrap();

@@ -364,6 +364,7 @@ var Edumin = function(){
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
         const formattedDate = date.toLocaleDateString('en-US', options);
         $('.footer .text-muted.date-time').text(formattedDate);
+		console.log(formattedDate);
     }, 1000);
 
 	/* Function ============ */

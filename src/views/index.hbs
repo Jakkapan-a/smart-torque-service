@@ -1,2 +1,185 @@
 {{!-- views/index.hbs --}}
-<h1>{{message}}</h1>
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Smart Torque Controls</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center">Setting</p>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Model Name</th>
+                        <th>Description</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <!--  <tr>
+                        <td>1</td>
+                        <td>Value 1</td>
+                        <td>
+                            <button class="btn btn-light">Activate</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Value 3</td>
+                        <td> <button class="btn btn-success">Deactivate</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary">Edit</button>
+                        </td>
+                    </tr>
+                    -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="edit-info" tabindex="-1" aria-labelledby="edit-info" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="edit-info">Edit Model</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-form">
+            <input type="hidden" name="id">
+            <div class="mb-3">
+                <label for="model-name" class="form-label">Model Name</label>
+                <input type="text" class="form-control" id="model-name" aria-describedby="model-name" name="name">
+            </div>
+            <div class="mb-3">
+                <label for="model-description" class="form-label">Description</label>
+                <textarea class="form-control" id="model-description" name="description" rows="3"></textarea>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-save">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load table
+        const table = document.querySelector('table');
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        // fetch data
+        const fetchData = async () => {
+            const response = await fetch('http://localhost:3000/api/model', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            const data = await response.json();
+            return data;
+        }
+        // Render data
+        const renderData = async () => {
+            const data = await fetchData();
+            // Clear table 
+            tbody.innerHTML = '';
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+
+                    <td>
+                        <button class="btn btn-${item.is_active ? 'success' : 'light'} btn-active" data-id="${item.id}" >${item.is_active ? 'Activated' : 'Activate'}</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-edit" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#edit-info">Edit</button>
+                        <!-- Manage model -->
+                        <a href="/model/${item.id}/manage" class="btn btn-warning">Manage</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        const body = document.querySelector('body');
+        body.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-active')) {
+                const id = e.target.getAttribute('data-id');
+                const response = await fetch(`http://localhost:3000/api/model/${id}/set-active`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                const data = await response.json();
+                renderData()
+            }
+            // Update model info
+            if(e.target.classList.contains('btn-edit')) {
+                const id = e.target.getAttribute('data-id');
+                const response = await fetch(`http://localhost:3000/api/model/${id}/show`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                const data = await response.json();
+
+                const form = document.querySelector('#edit-form');
+                form.querySelector('input[name="id"]').value = data.id;
+                form.querySelector('input[name="name"]').value = data.name;
+                form.querySelector('textarea[name="description"]').value = data.description;
+            }
+            // Save changes
+            if(e.target.classList.contains('btn-save')) {
+                const form = document.querySelector('#edit-form');
+                const id = form.querySelector('input[name="id"]').value;
+                const name = form.querySelector('input[name="name"]').value;
+                const description = form.querySelector('textarea[name="description"]').value;
+                const response = await fetch(`http://localhost:3000/api/model/${id}/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                        name,
+                        description
+                    })
+                });
+                const data = await response.json();
+                renderData();
+                $('#edit-info').modal('hide');
+            }
+        });
+
+        // Initialize
+        renderData();
+    });
+</script>

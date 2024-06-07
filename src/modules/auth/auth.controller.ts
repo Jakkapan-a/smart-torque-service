@@ -12,7 +12,6 @@ export class AuthController {
     @Get('/login')
     login(@Res() res: Response) 
     {
-        console.log('AuthController');
         return res.render('auth/login');
     }
     
@@ -30,6 +29,12 @@ export class AuthController {
     @Get('/profile')
     profile(@Res() res: Response) {
         return res.render('auth/profile');
+    }
+
+    @Post('/check')
+    @UseGuards(JwtGuard)
+    check(){
+        return {message: 'You are authorized'};
     }
 
     @Get('/register')

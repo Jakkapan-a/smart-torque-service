@@ -1,6 +1,3 @@
-
-
-// 
 document.addEventListener('DOMContentLoaded', function() {
     // form login
     const formLogin = document.querySelector('#form-login');
@@ -23,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(result);
             const token = result.access_token;
             localStorage.setItem('token', token);
+            alert("Login successfully!");
             window.location.href = '/';
-            alert("Login success");
         }else{
-            alert("Login failed");
+            alert("Failed username or password is wrong!");
         }
     });
 });
