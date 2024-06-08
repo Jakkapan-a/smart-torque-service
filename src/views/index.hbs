@@ -90,7 +90,7 @@
         const rows = tbody.querySelectorAll('tr');
         // fetch data
         const fetchData = async () => {
-            const response = await fetch('http://localhost:3000/api/model', {
+            const response = await fetch('/api/model', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -129,7 +129,7 @@
         body.addEventListener('click', async (e) => {
             if (e.target.classList.contains('btn-active')) {
                 const id = e.target.getAttribute('data-id');
-                const response = await fetch(`http://localhost:3000/api/model/${id}/set-active`, {
+                const response = await fetch(`/api/model/${id}/set-active`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -142,7 +142,7 @@
             // Update model info
             if(e.target.classList.contains('btn-edit')) {
                 const id = e.target.getAttribute('data-id');
-                const response = await fetch(`http://localhost:3000/api/model/${id}/show`, {
+                const response = await fetch(`/api/model/${id}/show`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -162,7 +162,7 @@
                 const id = form.querySelector('input[name="id"]').value;
                 const name = form.querySelector('input[name="name"]').value;
                 const description = form.querySelector('textarea[name="description"]').value;
-                const response = await fetch(`http://localhost:3000/api/model/${id}/update`, {
+                const response = await fetch(`/api/model/${id}/update`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -177,9 +177,6 @@
                     renderData();
                     $('#edit-info').modal('hide');
                 }
-                // const data = await response.json();
-                // renderData();
-                // $('#edit-info').modal('hide');
             }
         });
 

@@ -17,9 +17,16 @@ import { LogService } from './modules/log/log.service';
 import { LogModule } from './modules/log/log.module';
 import { ProcessModule } from './modules/process/process.module';
 import { CardRfidModule } from './modules/card-rfid/card-rfid.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      load: [configuration],
+    }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',

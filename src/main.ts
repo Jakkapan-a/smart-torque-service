@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import path, { join } from 'path';
 import * as hbs from 'hbs';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';
 
 async function printRoutes(server: any) {
   // Get the routes map
@@ -31,7 +32,14 @@ async function bootstrap() {
   const server = app.getHttpAdapter().getInstance();
   hbs.registerPartials(join(__dirname, '..', 'src/views/partials'));
   app.set('view options', { layout: 'layouts/main' });
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  console.log(configService.get('port'));
+  console.log(configService.get('database'));
+
+
+  await app.listen(configService.get('port'));
   printRoutes(server); 
+
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
