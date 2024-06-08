@@ -12,6 +12,11 @@ import { UserModule } from './modules/user/user.module';
 import { SequenceController } from './modules/sequence/sequence.controller';
 import { SequenceService } from './modules/sequence/sequence.service';
 import { SequenceModule } from './modules/sequence/sequence.module';
+import { HistoryModule } from './modules/history/history.module';
+import { LogService } from './modules/log/log.service';
+import { LogModule } from './modules/log/log.module';
+import { ProcessModule } from './modules/process/process.module';
+import { CardRfidModule } from './modules/card-rfid/card-rfid.module';
 
 @Module({
   imports: [
@@ -20,7 +25,7 @@ import { SequenceModule } from './modules/sequence/sequence.module';
       database: 'db.sqlite',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: true,
+      // logging: true,
     }),
     RouterModule.register([
       {
@@ -33,6 +38,10 @@ import { SequenceModule } from './modules/sequence/sequence.module';
     AuthModule,
     UserModule,
     SequenceModule,
+    HistoryModule,
+    LogModule,
+    ProcessModule,
+    CardRfidModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService, UserService],

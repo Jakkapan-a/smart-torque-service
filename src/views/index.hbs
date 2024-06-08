@@ -173,9 +173,13 @@
                         description
                     })
                 });
-                const data = await response.json();
-                renderData();
-                $('#edit-info').modal('hide');
+                if(response.status === 200 || response.status === 201) {
+                    renderData();
+                    $('#edit-info').modal('hide');
+                }
+                // const data = await response.json();
+                // renderData();
+                // $('#edit-info').modal('hide');
             }
         });
 
