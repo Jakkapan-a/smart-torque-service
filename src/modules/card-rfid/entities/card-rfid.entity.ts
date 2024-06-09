@@ -13,7 +13,7 @@ export class CardRfid {
     card_uid: string;
 
     @Column({ default: true })
-    is_active: boolean;
+    is_activate: boolean;
 
     @Column({ default: '' })
     description: string;

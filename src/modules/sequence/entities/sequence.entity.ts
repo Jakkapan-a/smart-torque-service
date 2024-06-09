@@ -22,7 +22,7 @@ export class Sequence {
     increment: number;
 
     @Column()
-    is_active: boolean;
+    is_activate: boolean;
 
     @Column()
     scw_count: number;

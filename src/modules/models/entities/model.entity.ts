@@ -8,9 +8,9 @@ export class Model {
 
     @Column()
     name: string;
-    // is_active is a boolean column that defaults to false
+    // is_activate is a boolean column that defaults to false
     @Column({ default: false })
-    is_active: boolean;
+    is_activate: boolean;
 
     @Column({ default: '' })
     description: string;

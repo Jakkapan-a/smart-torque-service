@@ -215,7 +215,7 @@
                 });
                 const data = await response.json();
                 if(response.status === 200 || response.status === 201) {
-                    alert('Sequence updated successfully');
+                    // alert('Sequence updated successfully');
                     loadTable();
                     const modal = bootstrap.Modal.getInstance(document.querySelector('#edit-sequence-modal'));
                     modal.hide();

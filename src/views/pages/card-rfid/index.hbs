@@ -22,8 +22,11 @@
                         <th>#</th>
                         <th>Name</th>
                         <th>Card UID</th>
-                        <th>Active</th>
+                        <th>Description</th>
+                        <th>Activate</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -65,20 +68,24 @@
                     {{!-- Name --}}
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <input type="text" class="form-control name" id="name" name="name" required>
                     </div>
                     {{!-- UUID --}}
                     <div class="mb-3">
                         <label for="card uid" class="form-label">CARD UUID</label>
-                        <input type="text" class="form-control" id="card_uid" name="card_uid" required>
+                        <input type="text" class="form-control card_uid" id="card_uid" name="card_uid" required>
                     </div>
-                    {{!-- is_active --}}
+
+                    {{!-- is_activate --}}
+                    <div class="form-check form-switch">
+                        <input class="form-check-input is_activate" id="is_activate" type="checkbox" name="is_activate">
+                    </div>
+
+                    {{!-- Description --}}
                     <div class="mb-3">
-                        <label for="is_active" class="form-label">Status</label>
-                        <select class="default-select form-control wide" id="is_active" name="is_active" required>
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control description" id="description" name="description"
+                            rows="3"></textarea>
                     </div>
                 </form>
             </div>
@@ -90,10 +97,56 @@
     </div>
 </div>
 
+<!-- Edit card-rfid modal -->
+<div class="modal fade" id="edit-card-rfid-modal" tabindex="-1" aria-labelledby="edit-card-rfid-modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="edit-card-rfid-modal">Edit Card RFID</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-sequence-form">
+                    <input type="hidden" class="id" id="id" name="id">
+                    {{!-- Name --}}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control name" id="name" name="name" required>
+                    </div>
+                    {{!-- UUID --}}
+                    <div class="mb-3">
+                        <label for="card uid" class="form-label">CARD UUID</label>
+                        <input type="text" class="form-control card_uid" id="card_uid" name="card_uid" required>
+                    </div>
+
+                    {{!-- is_activate --}}
+                    <div class="form-check form-switch">
+                        <input class="form-check-input is_activate" type="checkbox" id="is_activate" name="is_activate">
+                    </div>
+
+                    {{!-- Description --}}
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control description" id="description" name="description"
+                            rows="3"></textarea>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-update" id="btn-update">Update </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         const body = document.querySelector('body');
         body.addEventListener('click', async function (e) {
+            // pagination click
             if (e.target.classList.contains('page-link')) {
                 e.preventDefault();
                 const url = e.target.getAttribute('href');
@@ -102,44 +155,150 @@
                 const limit = urlParams.get('limit');
                 await loadTable(page, limit);
             }
-            // Create the "Next" button
 
+            // Edit button click
+            if (e.target.classList.contains('btn-edit')) {
+                const id = e.target.getAttribute('data-id');
+                const response = await fetch('/card-rfid/' + id + '/show', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    }
+                });
+                if (response.status !== 200) {
+                    alert('Something went wrong');
+                    const modal = bootstrap.Modal.getInstance(document.querySelector('#edit-card-rfid-modal'));
+                    modal.hide();
+                    return;
+                }
+                const data = await response.json();
+                const form = document.querySelector('#edit-sequence-form');
+                form.querySelector('#id').value = data.id;
+                form.querySelector('#name').value = data.name;
+                form.querySelector('#card_uid').value = data.card_uid;
+                form.querySelector('#is_activate').checked = data.is_activate;
+                form.querySelector('#description').value = data.description;
+            }
+
+            // Delete button click
+            if (e.target.classList.contains('btn-delete')) {
+                if (!confirm('Are you sure you want to delete this card RFID?')) {
+                    return;
+                }
+                const id = e.target.getAttribute('data-id');
+                const response = await fetch('/card-rfid/' + id + '/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    }
+                });
+                if (response.status === 204) {
+                    loadTable();
+                } else {
+                    alert('Something went wrong');
+                }
+            }
         });
 
         document.querySelector('#btn-save').addEventListener('click', async function (e) {
             e.preventDefault();
-            const name = document.querySelector('#name').value;
-            const card_uid = document.querySelector('#card_uid').value;
-            const is_active = document.querySelector('#is_active').value;
+            const form = document.querySelector('#add-sequence-form');
+            const name = form.querySelector('#name').value;
+            const card_uid = form.querySelector('#card_uid').value;
+            const is_activate = form.querySelector('#is_activate').checked;
+            const description = form.querySelector('#description').value;
+
             const data = {
                 name: name,
                 card_uid: card_uid,
-                is_active: is_active
+                is_activate: is_activate == 1 ? true : false,
+                description: description
             };
-            const response = await fetch('/card-rfid/get-all', {
+            const response = await fetch('/card-rfid', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + localStorage.getItem('token')
                 },
                 body: JSON.stringify(data)
             });
+
+            if (response.status === 201) {
+                // alert('Card RFID added successfully');
+                const modal = bootstrap.Modal.getInstance(document.querySelector('#add-card-rfid-modal'));
+                modal.hide();
+                // clear form
+                form.reset();
+                loadTable();
+            } else {
+                alert('Something went wrong');
+            }
+        });
+
+        document.querySelector("#btn-update").addEventListener('click', async function (e) {
+            e.preventDefault();
+            const form = document.querySelector('#edit-sequence-form');
+            const id = form.querySelector('.id').value;
+            const name = form.querySelector('.name').value;
+            const card_uid = form.querySelector('.card_uid').value;
+            const is_activate = form.querySelector('.is_activate').checked;
+            const description = form.querySelector('.description').value;
+            const data = {
+                name: name,
+                card_uid: card_uid,
+                is_activate: is_activate,
+                description: description
+            };
+            const response = await fetch('/card-rfid/' + id + '/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.status === 200 || response.status === 204) {
+                // alert('Card RFID updated successfully');
+                const modal = bootstrap.Modal.getInstance(document.querySelector('#edit-card-rfid-modal'));
+                modal.hide();
+                // clear form
+                form.reset();
+                loadTable();
+            } else {
+                alert('Something went wrong');
+            }
         });
 
         async function loadTable(page = 1, limit = 10) {
-            const response = await fetch('/card-rfid/get-all?page=' + page + '&limit=' + limit);
-            
+            const response = await fetch('/card-rfid/get-all?page=' + page + '&limit=' + limit, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                }
+            });
+
             const data = await response.json();
             const tbody = document.querySelector('tbody');
             tbody.innerHTML = '';
             data.items.forEach((item, index) => {
                 const tr = document.createElement('tr');
+                const updatedAt = new Date(item.updated_at);
+                const formattedDate = updatedAt.toLocaleDateString('en-CA'); // 'en-CA' for YYYY-MM-DD format
+
                 tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.card_uid}</td>
-                    <td>${item.is_active ? 'Active' : 'Inactive'}</td>
+                    <td>${item.description}</td>
+                    <td><span class="badge ${item.is_activate ? 'bg-success' : 'bg-danger'}">${item.is_activate ? 'Activate' : 'Inactivate'}</span></td>
+                    <td>${formattedDate}</td>
                     <td>
-                        <button class="btn btn-primary btn-edit" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#add-card-rfid-modal">Edit</button>
+                        <button class="btn btn-primary btn-edit" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#edit-card-rfid-modal">Edit</button>
                         <button class="btn btn-danger btn-delete" data-id="${item.id}">Delete</button>
                     </td>
                 `;

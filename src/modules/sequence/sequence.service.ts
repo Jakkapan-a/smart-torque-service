@@ -26,7 +26,7 @@ export class SequenceService {
         sequence.min = sequenceDto.min;
         sequence.max = sequenceDto.max;
         sequence.scw_count = sequenceDto.scw_count;
-        sequence.is_active = false;
+        sequence.is_activate = false;
         sequence.created_at = new Date();
         sequence.updated_at = new Date();
         return await this.sequenceRepository.save(sequence);
