@@ -1,0 +1,197 @@
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Card-rfid Setting</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center">Setting</p>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary" id="add-card-rfid" data-bs-toggle="modal"
+                    data-bs-target="#add-card-rfid-modal">Add Card RFID</button>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Card UID</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12 pagination-container">
+            <nav aria-label="page navigation ">
+                <p class="page-link">Showing 1 to 10 of 1 entries</p>
+
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item "><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item "><a class="page-link" href="#">3</a></li>
+                    <li class="page-item "><a class="page-link" href="#">4</a></li>
+                    <li class="page-item ">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Add card-rfid modal -->
+<div class="modal fade" id="add-card-rfid-modal" tabindex="-1" aria-labelledby="add-card-rfid-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-card-rfid-modal">Add Card RFID</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-sequence-form">
+                    {{!-- Name --}}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    {{!-- UUID --}}
+                    <div class="mb-3">
+                        <label for="card uid" class="form-label">CARD UUID</label>
+                        <input type="text" class="form-control" id="card_uid" name="card_uid" required>
+                    </div>
+                    {{!-- is_active --}}
+                    <div class="mb-3">
+                        <label for="is_active" class="form-label">Status</label>
+                        <select class="default-select form-control wide" id="is_active" name="is_active" required>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-save" id="btn-save">Save </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const body = document.querySelector('body');
+        body.addEventListener('click', async function (e) {
+            if (e.target.classList.contains('page-link')) {
+                e.preventDefault();
+                const url = e.target.getAttribute('href');
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const page = urlParams.get('page');
+                const limit = urlParams.get('limit');
+                await loadTable(page, limit);
+            }
+            // Create the "Next" button
+
+        });
+
+        document.querySelector('#btn-save').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const name = document.querySelector('#name').value;
+            const card_uid = document.querySelector('#card_uid').value;
+            const is_active = document.querySelector('#is_active').value;
+            const data = {
+                name: name,
+                card_uid: card_uid,
+                is_active: is_active
+            };
+            const response = await fetch('/card-rfid/get-all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        });
+
+        async function loadTable(page = 1, limit = 10) {
+            const response = await fetch('/card-rfid/get-all?page=' + page + '&limit=' + limit);
+            
+            const data = await response.json();
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+            data.items.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.card_uid}</td>
+                    <td>${item.is_active ? 'Active' : 'Inactive'}</td>
+                    <td>
+                        <button class="btn btn-primary btn-edit" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#add-card-rfid-modal">Edit</button>
+                        <button class="btn btn-danger btn-delete" data-id="${item.id}">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Pagination
+            const paginationContainer = document.querySelector('.pagination-container .pagination');
+            paginationContainer.innerHTML = '';
+
+            // Create the "Previous" button
+            const liPrevious = document.createElement('li');
+            liPrevious.classList.add('page-item');
+            if (data.meta.currentPage === 1) {
+                liPrevious.classList.add('disabled');
+            }
+            liPrevious.innerHTML = `
+                <a class="page-link" href="${data.links.previous || '#'}" tabindex="-1" aria-disabled="true">Previous</a>
+            `;
+            paginationContainer.appendChild(liPrevious);
+
+            // Determine the range of pages to show
+            const currentPage = data.meta.currentPage;
+            const totalPages = data.meta.totalPages;
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 3);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                if (i === currentPage) {
+                    li.classList.add('active');
+                }
+                li.innerHTML = `
+                    <a class="page-link" href="/card-rfid/get-all?page=${i}&limit=${data.meta.itemsPerPage}">${i}</a>
+                `;
+                paginationContainer.appendChild(li);
+            }
+
+            // Create the "Next" button
+            const liNext = document.createElement('li');
+            liNext.classList.add('page-item');
+            if (currentPage === totalPages) {
+                liNext.classList.add('disabled');
+            }
+            liNext.innerHTML = `
+                <a class="page-link" href="${data.links.next || '#'}">Next</a>
+            `;
+            paginationContainer.appendChild(liNext);
+
+        }
+        // Load table
+        loadTable();
+    });
+</script>

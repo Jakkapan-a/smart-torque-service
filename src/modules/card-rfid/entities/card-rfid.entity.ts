@@ -7,9 +7,9 @@ export class CardRfid {
     id: number;
 
     @Column()
-    card_id: string;
+    name: string;
 
-    @Column()
+    @Column({ unique: true})
     card_uid: string;
 
     @Column({ default: true })

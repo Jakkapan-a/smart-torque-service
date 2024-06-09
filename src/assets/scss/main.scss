@@ -58,7 +58,8 @@
 @import "./abstracts/abstracts";
 
 // Bootstrap
-@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+// @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../vendor/bootstrap/scss/bootstrap.scss";
 
 // Global
 @import "./base/base";
