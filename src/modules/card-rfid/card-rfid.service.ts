@@ -8,6 +8,7 @@ import {
     Pagination,
     IPaginationOptions,
   } from 'nestjs-typeorm-paginate';
+import { error } from 'console';
 
 @Injectable()
 export class CardRfidService {
@@ -119,7 +120,7 @@ export class CardRfidService {
         }
         const cardRfid = await this.cardRfidRepository.findOne({where: {card_uid, is_activate: true}});
         if(!cardRfid) {
-            throw new UnauthorizedException('Card RFID not found');
+            throw new UnauthorizedException({message: 'Card not found or not active', card_uid, error: 'Unauthorized',statusCode: 401 });
         }
         return {cardRfid,status: true};
     }

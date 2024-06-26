@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, Post, Put, Query, Render, UseGuards } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Header, HttpCode, Param, Post, Put, Query, Render, UseGuards } from '@nestjs/common';
 import { CardRfidService } from './card-rfid.service';
 import { CardPlayLoadRfidDto } from './dto/card-rfid.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -49,7 +49,7 @@ export class CardRfidController {
 
     @Get('verify-card')
     @HttpCode(200)
-    async verifyCard(@Body('card_uid') card_uid: string): Promise<{cardRfid: CardRfid, status: boolean}> {
+    async verifyCard(@Query('card_uid') card_uid: string): Promise<{cardRfid: CardRfid, status: boolean}> {
         return await this.cardRfidService.verifyCard(card_uid);
     }
 }
