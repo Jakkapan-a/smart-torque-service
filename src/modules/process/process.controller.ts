@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import { ProcessService } from './process.service';
 import { SequenceService } from '../sequence/sequence.service';
 
@@ -39,5 +39,14 @@ export class ProcessController {
         console.log(item_no);
 
         return 'Process info by item_no';
+    }
+
+    @Put('/:item_no/update')
+    async updateProcessInfoByItemNo(@Param('item_no') item_no: number,@Body() body: any) {
+        // console.log(item_no, body);
+
+       await this.processService.updateProcessInfoByItemNo(item_no, body);
+
+        return { item_no, 'message': 'Process info updated' };
     }
 }

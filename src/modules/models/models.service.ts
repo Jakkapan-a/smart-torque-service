@@ -71,4 +71,9 @@ export class ModelsService {
 
         return this.modelRepository.find();
     }
+
+    async getModelName(id: number): Promise<string> {
+        const model = await this.modelRepository.findOneBy({ id });
+        return model ? model.name : '';
+    }
 }
