@@ -120,8 +120,10 @@ export class CardRfidService {
         }
         const cardRfid = await this.cardRfidRepository.findOne({where: {card_uid, is_activate: true}});
         if(!cardRfid) {
-            throw new UnauthorizedException({message: 'Card not found or not active', card_uid, error: 'Unauthorized',statusCode: 401 });
+            throw new UnauthorizedException({message: 'Card not found or not active', card_uid, error: 'Unauthorized',statusCode: 401, status: false});
         }
-        return {cardRfid,status: true};
+
+        const is_activate = cardRfid.is_activate;
+        return {cardRfid,status: is_activate};
     }
 }
