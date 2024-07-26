@@ -109,7 +109,6 @@ export class CardRfidService {
         if(cardPlayLoadRfidDto.description === undefined) {
             throw new UnprocessableEntityException('Description is required');
         }
-        
         return true;
     }
 
