@@ -7,4 +7,5 @@ export default () => ({
         synchronize: true,
         // logging: true,
     },
+    JIG_NO: process.env.JIG_NO || '001',
 });

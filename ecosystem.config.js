@@ -4,7 +4,7 @@ module.exports = {
     name:"smart-torque-service",
     script: "dist/main.js",
     watch: false,
-    max_memory_restart: '500M',
+    max_memory_restart: '512M',
     env: {
       NODE_ENV: 'development',
     },
