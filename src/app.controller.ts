@@ -13,7 +13,7 @@ export class AppController {
   @Render('index')
   root() {
     const jig_no = this.configService.get('JIG_NO');
-    return { title: ": "+jig_no, message: 'Welcome to the Home Page' };
+    return { title: "SMART TORQUE", message: 'Welcome to the Home Page' ,jig_no: jig_no};
   }
   
   // about returns a JSON object
