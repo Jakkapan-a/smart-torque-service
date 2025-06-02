@@ -21,13 +21,14 @@
     "css:dev": "node-sass --watch src/assets/scss/main.scss src/assets/css/styles.css --source-map src/assets/css/styles.css.map"
   },
   "dependencies": {
-    "@nestjs/common": "^10.0.0",
+    "@nestjs/common": "^11.1.2",
     "@nestjs/config": "^3.2.2",
-    "@nestjs/core": "^10.0.0",
+    "@nestjs/core": "^11.1.2",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
-    "@nestjs/platform-express": "^10.3.9",
+    "@nestjs/platform-express": "^11.1.2",
     "@nestjs/serve-static": "^4.0.2",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^10.0.2",
     "bootstrap": "^5.3.3",
     "hbs": "^4.2.0",
