@@ -62,16 +62,16 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 *.sqlite
 
 # CSS
-src/**/*.css
-src/**/*.css.map
+# src/**/*.css
+# src/**/*.css.map
 
-# Images
-src/**/*.svg
-src/**/*.png
-src/**/*.jpg
-src/**/*.jpeg
-src/**/*.gif
-src/**/*.webp
+# # Images
+# src/**/*.svg
+# src/**/*.png
+# src/**/*.jpg
+# src/**/*.jpeg
+# src/**/*.gif
+# src/**/*.webp
 
 
 # Vendor
